@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "225267200683",
+    "project_id": "mathmory-3c5b6",
+    "storage_bucket": "mathmory-3c5b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:225267200683:android:cc3cd0e830cc6a665fbdee",
+        "android_client_info": {
+          "package_name": "com.who.mathmory"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAel-DUyrwkZlXpEvwp_-lWJA9XpiHmvwA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

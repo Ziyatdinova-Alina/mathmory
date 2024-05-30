@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">mathmory</string>
+    <string name="empty_string" />
+    <string name="navigate_back">Navigate to the previous screen</string>
+    <string name="jetpack_compose">Mathmory</string>
+    <!--Login-->
+    <string name="login_heading_text">Вход</string>
+    <string name="login_email_id_or_phone_label">Почта или номер телефона</string>
+    <string name="login_password_label">Пароль</string>
+    <string name="login_button_text">Войти</string>
+    <string name="forgot_password">Забыли пароль?</string>
+    <string name="icon_password_visible">Password Visible</string>
+    <string name="icon_password_hidden">Password Hidden</string>
+
+    <!--Login Error Messages-->
+    <string name="login_error_msg_empty_email_mobile">Пожалуйста введите вашу почту или номер телефона</string>
+    <string name="login_error_msg_empty_password">Пожалуйста введите ваш пароль</string>
+
+    <!--Login Page - Register Section-->
+    <string name="do_not_have_account">Нет аккаунта?</string>
+    <string name="register">Зарегистрироваться</string>
+    <string name="or">Или</string>
+    <string name="use_google_account">Использовать Google аккаунт</string>
+
+
+    <!--Registration-->
+    <string name="registration_heading_text">Регистрация</string>
+    <string name="registration_email_label">Почта</string>
+    <string name="registration_mobile_label">Номер телефона</string>
+    <string name="registration_password_label">Пароль</string>
+    <string name="registration_confirm_password_label">Подтвердите пароль</string>
+    <string name="registration_button_text">Зарегистрироваться</string>
+    <string name="back_to_login">Обратно к входу</string>
+
+    <!--Registration Error Messages-->
+    <string name="registration_error_msg_empty_email">Пожалуйста введите ваш адрес почты</string>
+    <string name="registration_error_msg_empty_mobile">Пожалуйста введите ваш номер телефона</string>
+    <string name="registration_error_msg_empty_password">Пожалуйста введите ваш пароль</string>
+    <string name="registration_error_msg_empty_confirm_password">Пожалуйства подтвердите ваш пароль</string>
+    <string name="registration_error_msg_password_mismatch">Пожалуйста введите совпадающий пароль</string>
+
+    <!--Dashboard-->
+    <string name="dashboard_title_welcome_user">Добро пожаловать</string>
+
+</resources>
