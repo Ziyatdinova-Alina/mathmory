@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt")
     id("com.google.gms.google-services")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -42,7 +43,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.2"
+        kotlinCompilerExtensionVersion = "1.5.14"
     }
     packaging {
         resources {
@@ -54,7 +55,6 @@ android {
 dependencies {
 
     implementation("androidx.room:room-ktx:2.6.1")
-    implementation("com.google.firebase:firebase-auth:23.0.0")
     kapt("androidx.room:room-compiler:2.6.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.0")
@@ -85,8 +85,11 @@ dependencies {
     implementation("io.coil-kt:coil-svg:2.1.0")
 
     implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
-    implementation(platform("com.google.firebase:firebase-auth-ktx:23.0.0"))
-    implementation(platform("com.google.android.gms:play-services-auth:20.4.1"))
+    implementation("com.google.firebase:firebase-auth-ktx:21.0.0")
+    implementation("com.google.android.gms:play-services-auth:20.1.0")
 
+    implementation("com.google.dagger:hilt-android:2.44")
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
 
+    implementation("com.github.stevdza-san:OneTapCompose:1.0.12")
     }
