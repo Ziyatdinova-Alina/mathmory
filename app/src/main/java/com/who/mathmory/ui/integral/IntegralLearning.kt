@@ -1,4 +1,4 @@
-package com.who.mathmory.ui
+package com.who.mathmory.ui.integral
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
@@ -27,7 +26,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -36,6 +37,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -45,25 +47,65 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.who.mathmory.Fonts
 import com.who.mathmory.R
+import com.who.mathmory.data.Derivatives
+import com.who.mathmory.data.Integrals
+import com.who.mathmory.data.MathDatabase
+import com.who.mathmory.data.Reaction
+import com.who.mathmory.ui.CardAnswer
+import com.who.mathmory.ui.CardQuestion
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @Composable
-fun DerivativeLearning(navController: NavController) {
+fun IntegralLearning(navController: NavController) {
     var rotated by remember {
         mutableStateOf(false)
     }
     var isAnswerShown by remember { mutableStateOf(false) }
-    var isReactionAgain by remember { mutableStateOf(false) }
-    var isReactionHard by remember { mutableStateOf(false) }
-    var isReactionOkay by remember { mutableStateOf(false) }
-    var isReactionEasy by remember { mutableStateOf(false) }
+    var currentReaction by remember { mutableStateOf(Reaction.NONE) }
 
+    val context = LocalContext.current
+    val database = MathDatabase(context)
 
+    var questions by remember { mutableStateOf<List<Integrals>>(emptyList()) }
+    var currentIndex by remember { mutableIntStateOf(0) }
 
+    LaunchedEffect(Unit) {
+        questions = database.getIntegralsBeforeTimestamp(System.currentTimeMillis())
+        if(questions.isEmpty())
+        {
+            withContext(Dispatchers.Main) {
+                navController.popBackStack()
+            }
+        }
+    }
 
     val rotation by animateFloatAsState(
         targetValue = if (rotated) 180f else 0f,
         animationSpec = tween(500), label = ""
     )
+
+    fun onNewCard() {
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(1000)
+            ++currentIndex
+            isAnswerShown = false
+            rotated = false
+            currentReaction = Reaction.NONE
+        }
+    }
+
+    fun setTimeForCurrentCard(minutes : Long){
+        CoroutineScope(Dispatchers.Main).launch {
+            val millis = minutes * 60 * 1000
+            database.updateTimestampForIntegrals(questions[currentIndex].question,
+                System.currentTimeMillis() + millis)
+        }
+    }
+
     Column(
         modifier= Modifier
             .background(colorResource(id = R.color.neptune))
@@ -87,7 +129,7 @@ fun DerivativeLearning(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Text(
-                    text = "1",
+                    text = (currentIndex + 1).toString(), //"1"
                     style = TextStyle(
                         fontFamily = Fonts.mulishFontFamily,
                         fontWeight = FontWeight.Black,
@@ -109,7 +151,7 @@ fun DerivativeLearning(navController: NavController) {
                         .padding(top = 3.dp, end = 1.dp, start = 1.dp)
                 )
                 Text(
-                    text = "31",
+                    text = questions.size.toString(), // "31"
                     style = TextStyle(
                         fontFamily = Fonts.mulishFontFamily,
                         fontWeight = FontWeight.Black,
@@ -146,173 +188,172 @@ fun DerivativeLearning(navController: NavController) {
 
         //REACTION
 
-
         Box()
         {
 
-
-
-            //AGAIN
-
-
-
-            if (isReactionAgain) {
-                Row(modifier = Modifier.padding(vertical = 25.dp, horizontal = 20.dp))
-                {
-                    OutlinedButton(
-                        onClick = {
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(id = R.color.neptune),
-                            contentColor = colorResource(id = R.color.black)
-                        ),
-                        border = BorderStroke(1.dp, colorResource(id = R.color.black)),
-                        shape = RoundedCornerShape(2.dp),
-                        modifier = Modifier
-                            .height(60.dp)
-                            .weight(0.2f),
-                        contentPadding = PaddingValues(0.dp)
-                    ) {
-                        Box(modifier = Modifier.border(BorderStroke(2.dp, colorResource(id = R.color.again)))){
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .fillMaxHeight()) {
-                                Icon(
-                                    painter = rememberAsyncImagePainter(model = R.drawable.reaction_again),
-                                    contentDescription = "menu",
-                                    modifier = Modifier.size(30.dp)
-                                )
-
-                            }
-                        }
-                    }
-                    Spacer(modifier = Modifier.weight(1f))
-                }
-            }
-            else if (isReactionHard) {
-                Row(modifier = Modifier.padding(vertical = 25.dp, horizontal = 20.dp))
-                {
-                    Spacer(modifier = Modifier.weight(1f))
-                    OutlinedButton(
-                        onClick = {
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(id = R.color.neptune),
-                            contentColor = colorResource(id = R.color.black)
-                        ),
-                        border = BorderStroke(1.dp, colorResource(id = R.color.black)),
-                        shape = RoundedCornerShape(2.dp),
-                        modifier = Modifier
-                            .height(60.dp)
-                            .weight(0.2f),
-                        contentPadding = PaddingValues(0.dp)
-                    ) {
-                        Box(modifier = Modifier.border(BorderStroke(2.dp, colorResource(id = R.color.hard)))){
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .fillMaxHeight()) {
-                                Icon(
-                                    painter = rememberAsyncImagePainter(model = R.drawable.reaction_hard),
-                                    contentDescription = "menu",
-                                    modifier = Modifier.size(30.dp)
-                                )
-
-                            }
-                        }
-                    }
-                }
-            }
-            else if (isReactionOkay) {
-                Row(modifier = Modifier.padding(vertical = 25.dp, horizontal = 20.dp))
-                {
-                    Spacer(modifier = Modifier.weight(1f))
-                    OutlinedButton(
-                        onClick = {
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(id = R.color.neptune),
-                            contentColor = colorResource(id = R.color.black)
-                        ),
-                        border = BorderStroke(1.dp, colorResource(id = R.color.black)),
-                        shape = RoundedCornerShape(2.dp),
-                        modifier = Modifier
-                            .height(60.dp)
-                            .weight(0.2f),
-                        contentPadding = PaddingValues(0.dp)
-                    ) {
-                        Box(modifier = Modifier.border(BorderStroke(2.dp, colorResource(id = R.color.yellow)))){
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .fillMaxHeight()) {
-                                Icon(
-                                    painter = rememberAsyncImagePainter(model = R.drawable.reaction_okay),
-                                    contentDescription = "menu",
-                                    modifier = Modifier.size(30.dp)
-                                )
-
-                            }
-                        }
-                    }
-                }
-            }
-            else if (isReactionEasy) {
-                Row(modifier = Modifier.padding(vertical = 25.dp, horizontal = 20.dp))
-                {
-                    Spacer(modifier = Modifier.weight(1f))
-                    OutlinedButton(
-                        onClick = {
-                        },
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = colorResource(id = R.color.neptune),
-                            contentColor = colorResource(id = R.color.black)
-                        ),
-                        border = BorderStroke(1.dp, colorResource(id = R.color.black)),
-                        shape = RoundedCornerShape(2.dp),
-                        modifier = Modifier
-                            .height(60.dp)
-                            .weight(0.2f),
-                        contentPadding = PaddingValues(0.dp)
-                    ) {
-                        Box(modifier = Modifier.border(BorderStroke(2.dp, colorResource(id = R.color.easy)))){
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .fillMaxHeight()) {
-                                Icon(
-                                    painter = rememberAsyncImagePainter(model = R.drawable.reaction_easy),
-                                    contentDescription = "menu",
-                                    modifier = Modifier.size(30.dp)
-                                )
-
-                            }
-                        }
-                    }
-                }
-            }
-            else
+            when(currentReaction)
             {
-                Column(modifier = Modifier.height(110.dp))
-                {
+                Reaction.NONE->{
+
+                }
+                Reaction.AGAIN->{
+                    Row(modifier = Modifier.padding(vertical = 25.dp, horizontal = 20.dp))
+                    {
+                        OutlinedButton(
+                            onClick = {
+                            },
+
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = colorResource(id = R.color.neptune),
+                                contentColor = colorResource(id = R.color.black)
+                            ),
+                            border = BorderStroke(1.dp, colorResource(id = R.color.black)),
+                            shape = RoundedCornerShape(2.dp),
+                            modifier = Modifier
+                                .height(60.dp)
+                                .weight(0.2f),
+                            contentPadding = PaddingValues(0.dp)
+                        ) {
+                            Box(modifier = Modifier.border(BorderStroke(2.dp, colorResource(id = R.color.again)))){
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .fillMaxHeight()) {
+                                    Icon(
+                                        painter = rememberAsyncImagePainter(model = R.drawable.reaction_again),
+                                        contentDescription = "menu",
+                                        modifier = Modifier.size(30.dp)
+                                    )
+
+                                }
+                            }
+                        }
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
+                }
+                Reaction.HARD->{
+                    Row(modifier = Modifier.padding(vertical = 25.dp, horizontal = 20.dp))
+                    {
+                        Spacer(modifier = Modifier.weight(1f))
+                        OutlinedButton(
+                            onClick = {
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = colorResource(id = R.color.neptune),
+                                contentColor = colorResource(id = R.color.black)
+                            ),
+                            border = BorderStroke(1.dp, colorResource(id = R.color.black)),
+                            shape = RoundedCornerShape(2.dp),
+                            modifier = Modifier
+                                .height(60.dp)
+                                .weight(0.2f),
+                            contentPadding = PaddingValues(0.dp)
+                        ) {
+                            Box(modifier = Modifier.border(BorderStroke(2.dp, colorResource(id = R.color.hard)))){
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .fillMaxHeight()) {
+                                    Icon(
+                                        painter = rememberAsyncImagePainter(model = R.drawable.reaction_hard),
+                                        contentDescription = "menu",
+                                        modifier = Modifier.size(30.dp)
+                                    )
+
+                                }
+                            }
+                        }
+                    }
+                }
+                Reaction.OKAY->{
+                    Row(modifier = Modifier.padding(vertical = 25.dp, horizontal = 20.dp))
+                    {
+                        Spacer(modifier = Modifier.weight(1f))
+                        OutlinedButton(
+                            onClick = {
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = colorResource(id = R.color.neptune),
+                                contentColor = colorResource(id = R.color.black)
+                            ),
+                            border = BorderStroke(1.dp, colorResource(id = R.color.black)),
+                            shape = RoundedCornerShape(2.dp),
+                            modifier = Modifier
+                                .height(60.dp)
+                                .weight(0.2f),
+                            contentPadding = PaddingValues(0.dp)
+                        ) {
+                            Box(modifier = Modifier.border(BorderStroke(2.dp, colorResource(id = R.color.yellow)))){
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .fillMaxHeight()) {
+                                    Icon(
+                                        painter = rememberAsyncImagePainter(model = R.drawable.reaction_okay),
+                                        contentDescription = "menu",
+                                        modifier = Modifier.size(30.dp)
+                                    )
+
+                                }
+                            }
+                        }
+                    }
+                }
+                Reaction.EASY->{
+                    Row(modifier = Modifier.padding(vertical = 25.dp, horizontal = 20.dp))
+                    {
+                        Spacer(modifier = Modifier.weight(1f))
+                        OutlinedButton(
+                            onClick = {
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = colorResource(id = R.color.neptune),
+                                contentColor = colorResource(id = R.color.black)
+                            ),
+                            border = BorderStroke(1.dp, colorResource(id = R.color.black)),
+                            shape = RoundedCornerShape(2.dp),
+                            modifier = Modifier
+                                .height(60.dp)
+                                .weight(0.2f),
+                            contentPadding = PaddingValues(0.dp)
+                        ) {
+                            Box(modifier = Modifier.border(BorderStroke(2.dp, colorResource(id = R.color.easy)))){
+                                Column(
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .fillMaxHeight()) {
+                                    Icon(
+                                        painter = rememberAsyncImagePainter(model = R.drawable.reaction_easy),
+                                        contentDescription = "menu",
+                                        modifier = Modifier.size(30.dp)
+                                    )
+
+                                }
+                            }
+                        }
+                    }
+                }
+                else ->{
+                    Column(modifier = Modifier.height(110.dp))
+                    {
+                    }
                 }
             }
+
         }
 
 
 
 
         //CARD
-
 
 
         Column(modifier = Modifier.padding(vertical = 20.dp, horizontal = 40.dp)) {
@@ -338,12 +379,29 @@ fun DerivativeLearning(navController: NavController) {
                     .shadow(3.dp)
             )
             {
-                if(!rotated){
-                    CardQuestion()
+                if(currentIndex >= questions.size && questions.isNotEmpty())
+                {
+                    navController.popBackStack()
                 }
-                if(isAnswerShown){
-                    CardAnswer(rotation)
+                else{
+                    if(!rotated){
+                        if(questions.isNotEmpty())
+                        {
+                            val questionForCard = questions[currentIndex].question
+                            CardQuestion(questionForCard)
+                        }
+
+                    }
+                    if(isAnswerShown){
+                        if(questions.isNotEmpty())
+                        {
+                            val answerForCard = questions[currentIndex].answer
+                            CardAnswer(rotation, answerForCard)
+                        }
+
+                    }
                 }
+
             }
         }
 
@@ -351,8 +409,6 @@ fun DerivativeLearning(navController: NavController) {
 
 
         //BUTTONS
-
-
 
 
         Spacer(modifier = Modifier.weight(1f))
@@ -366,11 +422,11 @@ fun DerivativeLearning(navController: NavController) {
 
                     //AGAIN
 
-
-
                     OutlinedButton(
                         onClick = {
-                            isReactionAgain = true
+                            currentReaction = Reaction.AGAIN
+                            setTimeForCurrentCard(1)
+                            onNewCard()
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = colorResource(id = R.color.neptune),
@@ -423,7 +479,9 @@ fun DerivativeLearning(navController: NavController) {
 
                     OutlinedButton(
                         onClick = {
-                            isReactionHard = true
+                            currentReaction = Reaction.HARD
+                            setTimeForCurrentCard(8)
+                            onNewCard()
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = colorResource(id = R.color.neptune),
@@ -476,7 +534,9 @@ fun DerivativeLearning(navController: NavController) {
 
                     OutlinedButton(
                         onClick = {
-                            isReactionOkay = true
+                            currentReaction = Reaction.OKAY
+                            setTimeForCurrentCard(15)
+                            onNewCard()
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = colorResource(id = R.color.neptune),
@@ -527,7 +587,9 @@ fun DerivativeLearning(navController: NavController) {
 
                     OutlinedButton(
                         onClick = {
-                                  isReactionEasy = true
+                            currentReaction = Reaction.EASY
+                            setTimeForCurrentCard(5760)
+                            onNewCard()
                         },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = colorResource(id = R.color.neptune),

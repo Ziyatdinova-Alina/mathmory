@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.who.mathmory.Fonts
-import com.who.mathmory.MainViewModel
+//import com.who.mathmory.MainViewModel
 import com.who.mathmory.R
 import com.who.mathmory.ui.Routes
 
@@ -38,13 +38,13 @@ import com.who.mathmory.ui.Routes
 
 @Composable
 fun MainScreen(
-    mainViewModel: MainViewModel = viewModel(factory = MainViewModel.factory),
+//    mainViewModel: MainViewModel = viewModel(factory = MainViewModel.factory),
     navController: NavController
 ) {
     val configuration = LocalConfiguration.current
     val screenHeight = configuration.screenHeightDp.dp
     val bottomPadding = screenHeight * 0.3f
-    val itemsList = mainViewModel.itemsList.collectAsState(initial = emptyList())
+//    val itemsList = mainViewModel.itemsList.collectAsState(initial = emptyList())
     Box(modifier = Modifier.background(colorResource(id = R.color.neptune))){    Box(modifier = Modifier
         .fillMaxSize()
         .padding(horizontal = 40.dp)

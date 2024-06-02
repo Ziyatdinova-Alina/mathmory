@@ -1,4 +1,4 @@
-package com.who.mathmory.ui
+package com.who.mathmory.ui.integral
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row

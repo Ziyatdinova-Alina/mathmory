@@ -1,4 +1,4 @@
-package com.who.mathmory.ui
+package com.who.mathmory.ui.integral
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -33,10 +33,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.who.mathmory.Fonts
 import com.who.mathmory.R
-import com.who.mathmory.ui.DerivativeList
+import com.who.mathmory.ui.Routes
 
 @Composable
-fun DerivativeTable(navController: NavController) {
+fun IntegralTable(navController: NavController) {
     Column(
         modifier= Modifier
             .background(colorResource(id = R.color.neptune))
@@ -55,11 +55,11 @@ fun DerivativeTable(navController: NavController) {
                 modifier = Modifier
                     .height(25.dp)
                     .graphicsLayer(rotationZ = 180f)
-                    .clickable {navController.popBackStack()}
+                    .clickable { navController.popBackStack() }
             )
             Spacer(modifier = Modifier.weight(1f))
             Text(
-                text = "Производные",
+                text = "Интегралы",
                 style = TextStyle(
                     fontFamily = Fonts.mulishFontFamily,
                     fontWeight = FontWeight.Black,
@@ -85,14 +85,16 @@ fun DerivativeTable(navController: NavController) {
                 .padding(top = 20.dp, bottom = 8.dp)
         )
         Spacer(modifier = Modifier.height(16.dp))
-        LazyColumn(modifier = Modifier.fillMaxWidth().weight(1f)) {
+        LazyColumn(modifier = Modifier
+            .fillMaxWidth()
+            .weight(1f)) {
             items(1){
-                DerivativeList()
+                IntegralList()
             }
         }
         OutlinedButton(
             onClick = {
-                navController.navigate(Routes.derivativeLearning)
+                navController.navigate(Routes.integralLearning)
             },
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(id = R.color.neptune),

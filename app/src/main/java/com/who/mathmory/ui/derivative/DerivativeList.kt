@@ -1,4 +1,4 @@
-package com.who.mathmory.ui
+package com.who.mathmory.ui.derivative
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Row
