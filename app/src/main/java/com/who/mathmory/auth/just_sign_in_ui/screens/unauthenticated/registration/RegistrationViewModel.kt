@@ -1,7 +1,10 @@
 package com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticated.registration
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.FirebaseAuth
 import com.who.mathmory.auth.just_sign_in_ui.common.state.ErrorState
 import com.jodhpurtechies.composelogin.ui.screens.unauthenticated.registration.state.*
 import com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticated.registration.state.confirmPasswordEmptyErrorState
@@ -103,7 +106,12 @@ class RegistrationViewModel : ViewModel() {
             is RegistrationUiEvent.Submit -> {
                 val inputsValidated = validateInputs()
                 if (inputsValidated) {
-                    // TODO Trigger registration in authentication flow
+                    createUserInFirebase(
+                        email = registrationState.value.emailId,
+                        phone = registrationState.value.mobileNumber,
+                        password = registrationState.value.password,
+                        confirmPassword = registrationState.value.confirmPassword
+                    )
                     registrationState.value =
                         registrationState.value.copy(isRegistrationSuccessful = true)
                 }
@@ -184,4 +192,19 @@ class RegistrationViewModel : ViewModel() {
             }
         }
     }
+
+    private fun createUserInFirebase(email:String, phone: String, password:String, confirmPassword:String){
+        FirebaseAuth.getInstance()
+            .createUserWithEmailAndPassword(email, password)
+            .addOnCompleteListener{
+                Log.d(TAG, "Inside_OnCompleteListener")
+                Log.d(TAG, "isSuccessful = ${it.isSuccessful}")
+            }
+            .addOnFailureListener{
+                Log.d(TAG, "Inside_OnFailureListener")
+                Log.d(TAG, "Exception ${it.localizedMessage}")
+
+            }
+    }
+
 }
