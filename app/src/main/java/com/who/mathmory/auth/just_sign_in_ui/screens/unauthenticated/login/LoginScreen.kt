@@ -178,5 +178,12 @@ fun LoginScreen(
         }
 
     }
+    if (loginState.errorMessage != null) {
+        Text(
+            text = loginState.errorMessage!!,
+            color = Color(0xffb2261e),
+            modifier = Modifier.padding(8.dp)
+        )
+    }
 
 }

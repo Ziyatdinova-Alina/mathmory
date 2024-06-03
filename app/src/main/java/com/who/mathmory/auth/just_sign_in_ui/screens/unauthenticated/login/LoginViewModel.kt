@@ -1,7 +1,10 @@
 package com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticated.login
 
+import android.content.ContentValues
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.FirebaseAuth
 import com.who.mathmory.auth.just_sign_in_ui.common.state.ErrorState
 import com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticated.login.state.LoginErrorState
 import com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticated.login.state.LoginState
@@ -53,8 +56,8 @@ class LoginViewModel : ViewModel() {
             is LoginUiEvent.Submit -> {
                 val inputsValidated = validateInputs()
                 if (inputsValidated) {
-                    // TODO Trigger login in authentication flow
-                    loginState.value = loginState.value.copy(isLoginSuccessful = true)
+                    login()
+                    //loginState.value = loginState.value.copy(isLoginSuccessful = true)
                 }
             }
 //            is LoginUiEvent.GoogleSignIn -> {
@@ -107,5 +110,40 @@ class LoginViewModel : ViewModel() {
             }
         }
     }
+
+    private fun login(){
+        val emailOrMobile = loginState.value.emailOrMobile
+        val password = loginState.value.password
+        val isEmail = emailOrMobile.contains("@")
+
+        if (isEmail) {
+            FirebaseAuth
+                .getInstance()
+                .signInWithEmailAndPassword(emailOrMobile, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        // Login successful
+                        loginState.value = loginState.value.copy(isLoginSuccessful = true)
+                        Log.d(ContentValues.TAG, "Inside_OnCompleteListener")
+                        Log.d(ContentValues.TAG, "isSuccessful = ${task.isSuccessful}")
+                    } else {
+                        // Login failed
+                        loginState.value = loginState.value.copy(isLoginSuccessful = false, errorMessage = "Пароль не совпадает.")
+                        Log.d(ContentValues.TAG, "Inside_OnCompleteListener")
+                        Log.d(ContentValues.TAG, "isSuccessful = ${task.isSuccessful}")
+                    }
+                }
+                .addOnFailureListener {
+                    Log.d(ContentValues.TAG, "Inside_OnFailureListener")
+                    Log.d(ContentValues.TAG, "Exception ${it.localizedMessage}")
+                }
+        }
+        else
+        {
+            loginState.value = loginState.value.copy(isLoginSuccessful = false, errorMessage = "Пользователь не найден. Попробуйте зарегистрироваться или войти с помощью почты.")
+        }
+
+    }
+
 
 }

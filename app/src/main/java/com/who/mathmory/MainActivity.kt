@@ -200,7 +200,7 @@ class MainActivity : ComponentActivity() {
 
                     builder ={
 
-                        unauthenticatedGraph(navController = navController)
+                        unauthenticatedGraph(navController = navController,)
 
                         authenticatedGraph(navController = navController)
 

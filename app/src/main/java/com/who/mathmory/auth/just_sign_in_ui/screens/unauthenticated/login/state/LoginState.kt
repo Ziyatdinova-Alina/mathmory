@@ -10,6 +10,7 @@ data class LoginState(
     val password: String = "",
     val errorState: LoginErrorState = LoginErrorState(),
     val isLoginSuccessful: Boolean = false,
+    val errorMessage: String? = null
     //val isGoogleLoginSuccessful: Boolean = false,
 )
 

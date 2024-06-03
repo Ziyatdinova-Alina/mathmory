@@ -36,6 +36,7 @@ fun RegistrationScreen(
 
     if (registrationState.isRegistrationSuccessful) {
         LaunchedEffect(key1 = true) {
+            
             onNavigateToAuthenticatedRoute.invoke()
         }
     } else {

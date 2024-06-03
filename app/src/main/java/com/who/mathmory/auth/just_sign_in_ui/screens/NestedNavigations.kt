@@ -1,5 +1,7 @@
 package com.who.mathmory.auth.just_sign_in_ui.screens
 
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -22,14 +24,19 @@ fun NavGraphBuilder.unauthenticatedGraph(navController: NavController) {
     ) {
 
         // Login
-        composable(route = NavigationRoutes.Unauthenticated.Login.route) {
+        composable(route = NavigationRoutes.Unauthenticated.Login.route,
+            enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(700)) },
+            exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(700)) },
+            popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(700)) },
+            popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(700)) }) {
             LoginScreen(
                 onNavigateToRegistration = {
                     navController.navigate(route = NavigationRoutes.Unauthenticated.Registration.route)
                 },
                 onNavigateToForgotPassword = {},
+
                 onNavigateToAuthenticatedRoute = {
-                    navController.navigate(route = NavigationRoutes.Authenticated.NavigationRoute.route) {
+                    navController.navigate(route = NavigationRoutes.Authenticated.NavigationRoute.route,) {
                         popUpTo(route = NavigationRoutes.Unauthenticated.NavigationRoute.route) {
                             inclusive = true
                         }
@@ -40,7 +47,11 @@ fun NavGraphBuilder.unauthenticatedGraph(navController: NavController) {
         }
 
         // Registration
-        composable(route = NavigationRoutes.Unauthenticated.Registration.route) {
+        composable(route = NavigationRoutes.Unauthenticated.Registration.route,
+            enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(700)) },
+            exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(700)) },
+            popEnterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(700)) },
+            popExitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, tween(700)) }) {
             RegistrationScreen(
                 onNavigateBack = {
                     navController.navigateUp()
@@ -60,14 +71,14 @@ fun NavGraphBuilder.unauthenticatedGraph(navController: NavController) {
 /**
  * Authenticated screens nav graph builder
  */
-fun NavGraphBuilder.authenticatedGraph(navController: NavController) {
+fun NavGraphBuilder.authenticatedGraph(navController: NavController,) {
     navigation(
         route = NavigationRoutes.Authenticated.NavigationRoute.route,
-        startDestination = Routes.mainScreen
+        startDestination = Routes.mainScreen,
     ) {
         // Dashboard
         composable(route = Routes.mainScreen) {
-            MainScreen(navController = navController)
+            MainScreen(navController = navController,)
         }
     }
 }
