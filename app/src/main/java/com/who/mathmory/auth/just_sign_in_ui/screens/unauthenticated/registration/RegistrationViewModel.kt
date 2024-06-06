@@ -7,6 +7,8 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.who.mathmory.auth.just_sign_in_ui.common.state.ErrorState
 import com.jodhpurtechies.composelogin.ui.screens.unauthenticated.registration.state.*
+import com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticated.registration.state.RegistrationErrorState
+import com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticated.registration.state.RegistrationState
 import com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticated.registration.state.confirmPasswordEmptyErrorState
 import com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticated.registration.state.emailEmptyErrorState
 import com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticated.registration.state.mobileNumberEmptyErrorState
@@ -112,8 +114,8 @@ class RegistrationViewModel : ViewModel() {
                         password = registrationState.value.password,
                         confirmPassword = registrationState.value.confirmPassword
                     )
-                    registrationState.value =
-                        registrationState.value.copy(isRegistrationSuccessful = true)
+                    //registrationState.value =
+                        //registrationState.value.copy(isRegistrationSuccessful = true)
                 }
             }
         }
@@ -197,10 +199,13 @@ class RegistrationViewModel : ViewModel() {
         FirebaseAuth.getInstance()
             .createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener{
+                registrationState.value = registrationState.value.copy(isRegistrationSuccessful = true)
                 Log.d(TAG, "Inside_OnCompleteListener")
                 Log.d(TAG, "isSuccessful = ${it.isSuccessful}")
             }
             .addOnFailureListener{
+                registrationState.value = registrationState.value.copy(isRegistrationSuccessful = false, errorMessage = "Регистрация не произошла.")
+
                 Log.d(TAG, "Inside_OnFailureListener")
                 Log.d(TAG, "Exception ${it.localizedMessage}")
 

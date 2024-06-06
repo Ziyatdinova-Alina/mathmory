@@ -137,7 +137,7 @@ fun MainScreen(
             Image(
                 painter = painterResource(id = R.drawable.main_settings),
                 contentDescription = "settings",
-                modifier = Modifier.size(25.dp)
+                modifier = Modifier.size(25.dp).clickable{navController.navigate(Routes.profileScreen)}
             )
             Spacer(modifier = Modifier.weight(1f))
             Image(

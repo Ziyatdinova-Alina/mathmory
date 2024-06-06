@@ -1,16 +1,20 @@
 package com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticated.login
 
 import android.content.ContentValues
+import android.content.ContentValues.TAG
 import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuth.AuthStateListener
 import com.who.mathmory.auth.just_sign_in_ui.common.state.ErrorState
 import com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticated.login.state.LoginErrorState
 import com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticated.login.state.LoginState
 import com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticated.login.state.LoginUiEvent
 import com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticated.login.state.emailOrMobileEmptyErrorState
 import com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticated.login.state.passwordEmptyErrorState
+import com.who.mathmory.ui.Routes
 
 /**
  * ViewModel for Login Screen
@@ -145,5 +149,22 @@ class LoginViewModel : ViewModel() {
 
     }
 
+    fun logout(navController: NavController){
+        navController.popBackStack()
+
+        val firebaseAuth = FirebaseAuth.getInstance()
+
+        firebaseAuth.signOut()
+
+        val authStateListener = AuthStateListener{
+            if(it.currentUser == null){
+                Log.d(TAG, "Inside logout success")
+            }else{
+                Log.d(TAG, "Inside logout is not complete")
+            }
+        }
+
+        firebaseAuth.addAuthStateListener(authStateListener)
+    }
 
 }

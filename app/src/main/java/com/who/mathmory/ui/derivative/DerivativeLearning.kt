@@ -195,10 +195,11 @@ fun DerivativeLearning(navController: NavController) {
             when(currentReaction)
             {
                 Reaction.NONE->{
+                    Row(modifier = Modifier.padding(top = 85.dp)){}
 
                 }
                 Reaction.AGAIN->{
-                    Row(modifier = Modifier.padding(vertical = 25.dp, horizontal = 20.dp))
+                    Row(modifier = Modifier.padding(bottom = 25.dp, start = 20.dp, end = 20.dp))
                     {
                         OutlinedButton(
                             onClick = {
@@ -235,7 +236,7 @@ fun DerivativeLearning(navController: NavController) {
                     }
                 }
                 Reaction.HARD->{
-                    Row(modifier = Modifier.padding(vertical = 25.dp, horizontal = 20.dp))
+                    Row(modifier = Modifier.padding(bottom = 25.dp, start = 20.dp, end = 20.dp))
                     {
                         Spacer(modifier = Modifier.weight(1f))
                         OutlinedButton(
@@ -271,7 +272,7 @@ fun DerivativeLearning(navController: NavController) {
                     }
                 }
                 Reaction.OKAY->{
-                    Row(modifier = Modifier.padding(vertical = 25.dp, horizontal = 20.dp))
+                    Row(modifier = Modifier.padding(bottom = 25.dp, start = 20.dp, end = 20.dp))
                     {
                         Spacer(modifier = Modifier.weight(1f))
                         OutlinedButton(
@@ -307,7 +308,7 @@ fun DerivativeLearning(navController: NavController) {
                     }
                 }
                 Reaction.EASY->{
-                    Row(modifier = Modifier.padding(vertical = 25.dp, horizontal = 20.dp))
+                    Row(modifier = Modifier.padding(bottom = 25.dp, start = 20.dp, end = 20.dp))
                     {
                         Spacer(modifier = Modifier.weight(1f))
                         OutlinedButton(
@@ -342,11 +343,7 @@ fun DerivativeLearning(navController: NavController) {
                         }
                     }
                 }
-                else ->{
-                    Column(modifier = Modifier.height(110.dp))
-                    {
-                    }
-                }
+
             }
 
         }
@@ -356,8 +353,7 @@ fun DerivativeLearning(navController: NavController) {
 
         //CARD
 
-
-        Column(modifier = Modifier.padding(vertical = 20.dp, horizontal = 40.dp)) {
+        Column(modifier = Modifier.padding( start = 40.dp, end = 40.dp)) {
             OutlinedButton(
                 onClick = {
                     if(isAnswerShown){

@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
-import com.jodhpurtechies.composelogin.ui.screens.unauthenticated.registration.state.RegistrationState
+import com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticated.registration.state.RegistrationState
 import com.who.mathmory.auth.just_sign_in_ui.common.customComposableViews.NormalButton
 import com.who.mathmory.R
 import com.who.mathmory.auth.just_sign_in_ui.common.customComposableViews.EmailTextField

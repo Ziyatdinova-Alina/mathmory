@@ -8,6 +8,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.res.colorResource
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -15,11 +17,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.room.Room
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.google.android.gms.auth.api.identity.Identity
+import com.google.firebase.auth.FirebaseAuth
 import com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticated.googlesignin.sign_in.GoogleAuthUiClient
 import com.who.mathmory.auth.just_sign_in_ui.screens.NavigationRoutes
 import com.who.mathmory.auth.just_sign_in_ui.screens.authenticatedGraph
 import com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticated.googlesignin.sign_in.SignInViewModel
+import com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticated.login.LoginViewModel
 //import com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticated.googlesignin.googleGraph
 import com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticatedGraph
 import com.who.mathmory.data.Derivatives
@@ -31,6 +36,7 @@ import com.who.mathmory.ui.integral.IntegralTable
 import com.who.mathmory.ui.MainScreen
 import com.who.mathmory.ui.Routes
 import com.who.mathmory.ui.integral.IntegralLearning
+import com.who.mathmory.ui.profile.ProfileScreen
 import com.who.mathmory.ui.theme.MathmoryTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -135,6 +141,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
         database = MathDatabase(this@MainActivity)
         scope.launch {
@@ -188,10 +195,20 @@ class MainActivity : ComponentActivity() {
         setContent {
             MathmoryTheme {
 
+                val systemUiController = rememberSystemUiController()
+                val statusBarColor = colorResource(id = R.color.neptune)
+
+                SideEffect {
+                    // Set the status bar color
+                    systemUiController.setStatusBarColor(
+                        color = statusBarColor
+                    )
+                }
+
                 val navController = rememberNavController()
                 NavHost(
                     navController = navController,
-                    startDestination = NavigationRoutes.Unauthenticated.NavigationRoute.route,
+                    startDestination = if(FirebaseAuth.getInstance().currentUser == null){NavigationRoutes.Unauthenticated.NavigationRoute.route}else{NavigationRoutes.Authenticated.NavigationRoute.route},
 
                     enterTransition = { slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(700))},
                     exitTransition = { slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, tween(700)) },
@@ -214,12 +231,14 @@ class MainActivity : ComponentActivity() {
                         composable(Routes.integralTable){
                             IntegralTable(navController)
                         }
-
                         composable(Routes.derivativeLearning){
                             DerivativeLearning(navController)
                         }
                         composable(Routes.integralLearning){
                             IntegralLearning(navController)
+                        }
+                        composable(Routes.profileScreen){
+                            ProfileScreen(LoginViewModel(), navController = navController)
                         }
 
                     }

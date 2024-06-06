@@ -43,5 +43,8 @@
     <string name="dashboard_title_welcome_user">Добро пожаловать</string>
 
     <string name="web_client_id">225267200683-5599qe47jc4d8ja47607h8nl4bv3ui7r.apps.googleusercontent.com</string>
+    <string name="username">username</string>
+    <string name="go_back">Вернуться на страницу</string>
+    <string name="logout">Выйти из аккаунта</string>
 
 </resources>

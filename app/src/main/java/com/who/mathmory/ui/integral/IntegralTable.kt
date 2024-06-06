@@ -75,6 +75,7 @@ fun IntegralTable(navController: NavController) {
                 modifier = Modifier
                     .height(25.dp)
                     .align(Alignment.CenterVertically)
+                    .clickable{navController.navigate(Routes.profileScreen)}
             )
         }
         Divider(

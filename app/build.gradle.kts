@@ -92,4 +92,6 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.44")
 
     implementation("com.github.stevdza-san:OneTapCompose:1.0.12")
+
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.23.1")
     }

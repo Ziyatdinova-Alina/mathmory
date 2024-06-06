@@ -20,7 +20,7 @@ fun NavGraphBuilder.unauthenticatedGraph(navController: NavController) {
 
     navigation(
         route = NavigationRoutes.Unauthenticated.NavigationRoute.route,
-        startDestination = NavigationRoutes.Unauthenticated.Login.route
+        startDestination = NavigationRoutes.Unauthenticated.Login.route,
     ) {
 
         // Login
@@ -75,6 +75,7 @@ fun NavGraphBuilder.authenticatedGraph(navController: NavController,) {
     navigation(
         route = NavigationRoutes.Authenticated.NavigationRoute.route,
         startDestination = Routes.mainScreen,
+
     ) {
         // Dashboard
         composable(route = Routes.mainScreen) {

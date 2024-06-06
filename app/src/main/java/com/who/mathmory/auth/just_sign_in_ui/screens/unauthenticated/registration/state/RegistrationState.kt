@@ -1,4 +1,4 @@
-package com.jodhpurtechies.composelogin.ui.screens.unauthenticated.registration.state
+package com.who.mathmory.auth.just_sign_in_ui.screens.unauthenticated.registration.state
 
 import com.who.mathmory.auth.just_sign_in_ui.common.state.ErrorState
 
@@ -11,7 +11,8 @@ data class RegistrationState(
     val password: String = "",
     val confirmPassword: String = "",
     val errorState: RegistrationErrorState = RegistrationErrorState(),
-    val isRegistrationSuccessful: Boolean = false
+    val isRegistrationSuccessful: Boolean = false,
+    val errorMessage: String? = null
 )
 
 /**

@@ -194,10 +194,11 @@ fun IntegralLearning(navController: NavController) {
             when(currentReaction)
             {
                 Reaction.NONE->{
+                    Row(modifier = Modifier.padding(top = 85.dp)){}
 
                 }
                 Reaction.AGAIN->{
-                    Row(modifier = Modifier.padding(vertical = 25.dp, horizontal = 20.dp))
+                    Row(modifier = Modifier.padding(bottom = 25.dp, start = 20.dp, end = 20.dp))
                     {
                         OutlinedButton(
                             onClick = {
@@ -234,7 +235,7 @@ fun IntegralLearning(navController: NavController) {
                     }
                 }
                 Reaction.HARD->{
-                    Row(modifier = Modifier.padding(vertical = 25.dp, horizontal = 20.dp))
+                    Row(modifier = Modifier.padding(bottom = 25.dp, start = 20.dp, end = 20.dp))
                     {
                         Spacer(modifier = Modifier.weight(1f))
                         OutlinedButton(
@@ -270,7 +271,7 @@ fun IntegralLearning(navController: NavController) {
                     }
                 }
                 Reaction.OKAY->{
-                    Row(modifier = Modifier.padding(vertical = 25.dp, horizontal = 20.dp))
+                    Row(modifier = Modifier.padding(bottom = 25.dp, start = 20.dp, end = 20.dp))
                     {
                         Spacer(modifier = Modifier.weight(1f))
                         OutlinedButton(
@@ -306,7 +307,7 @@ fun IntegralLearning(navController: NavController) {
                     }
                 }
                 Reaction.EASY->{
-                    Row(modifier = Modifier.padding(vertical = 25.dp, horizontal = 20.dp))
+                    Row(modifier = Modifier.padding(bottom = 25.dp, start = 20.dp, end = 20.dp))
                     {
                         Spacer(modifier = Modifier.weight(1f))
                         OutlinedButton(
@@ -356,7 +357,7 @@ fun IntegralLearning(navController: NavController) {
         //CARD
 
 
-        Column(modifier = Modifier.padding(vertical = 20.dp, horizontal = 40.dp)) {
+        Column(modifier = Modifier.padding(start = 40.dp, end = 40.dp)) {
             OutlinedButton(
                 onClick = {
                     if(isAnswerShown){

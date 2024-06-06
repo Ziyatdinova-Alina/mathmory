@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
@@ -75,9 +76,10 @@ fun DerivativeTable(navController: NavController) {
                 modifier = Modifier
                     .height(25.dp)
                     .align(Alignment.CenterVertically)
+                    .clickable{navController.navigate(Routes.profileScreen)}
             )
         }
-        Divider(
+        HorizontalDivider(
             color = Color.Black,
             thickness = 1.dp,
             modifier = Modifier
